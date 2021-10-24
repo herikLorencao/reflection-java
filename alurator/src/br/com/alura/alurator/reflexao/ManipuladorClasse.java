@@ -1,19 +1,28 @@
 package br.com.alura.alurator.reflexao;
 
+import java.lang.reflect.Constructor;
+
 public class ManipuladorClasse {
 
-	private Class<?> clazz;
+	private Class<?> classe;
 
-	public ManipuladorClasse(Class<?> clazz) {
-		this.clazz = clazz;
+	public ManipuladorClasse(Class<?> classe) {
+		this.classe = classe;
 	}
-	
+
 	public ManipuladorConstrutor getConstrutorPadrao() {
 		try {
-			return new ManipuladorConstrutor(clazz.getDeclaredConstructor());
+			Constructor<?> construtorPadrao = classe.getDeclaredConstructor();
+			return new ManipuladorConstrutor(construtorPadrao);
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
+
+	public ManipuladorObjeto criaInstancia() {
+		Object instancia = getConstrutorPadrao().invoca();
+		return new ManipuladorObjeto(instancia);
+	}
+
 }

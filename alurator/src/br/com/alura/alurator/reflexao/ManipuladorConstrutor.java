@@ -16,9 +16,10 @@ public class ManipuladorConstrutor {
 			return construtor.newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return new RuntimeException(e);
 		} catch (InvocationTargetException e) {
-			throw new RuntimeException("erro na invocação!", e.getTargetException());
+			e.printStackTrace();
+			return new RuntimeException("Erro no construtor!", e.getTargetException());
 		}
 	}
 
