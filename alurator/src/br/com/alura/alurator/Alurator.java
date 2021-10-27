@@ -1,5 +1,7 @@
 package br.com.alura.alurator;
 
+import java.util.Map;
+
 import br.com.alura.alurator.protocolo.Request;
 import br.com.alura.alurator.reflexao.Reflexao;
 
@@ -23,19 +25,18 @@ public class Alurator {
 		
 		String nomeControle = request.getNomeControle();
 		String nomeMetodo = request.getNomeMetodo();
-		
-//		Object instanciaControle = new Reflexao()
-//										.refleteClasse( pacoteBase + nomeControle )
-//										.getConstrutorPadrao()
-//										.invoca();
+		Map<String, Object> params = request.getQueryParams();
 		
 		Object retorno = new Reflexao()
 			                .refleteClasse( pacoteBase + nomeControle )
 			                .criaInstancia()
-			                .getMetodo(nomeMetodo)
+			                .getMetodo(nomeMetodo, params)
+			                .comTratamentoDeExcecao((metodo, ex) -> {
+				                	System.out.println("Erro no método " + metodo.getName() + " da classe " 
+				                            + metodo.getDeclaringClass().getName() + ".\n\n");
+				                	throw new RuntimeException("Erro no método!");
+			                })
 			                .invoca();
-		
-//		obj.metodo()
 			
 		System.out.println(retorno);
 		
